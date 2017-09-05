@@ -29,7 +29,7 @@ almacena_sprites <- function(tabla_base, ruta_carpeta){
     
     # Almacenando el archivo en la ruta adecuada
     GET(url, write_disk(ruta_archivo))
-    })
+  })
 }
 
 ruta_carpeta <- "../sprites/1_251"
@@ -67,7 +67,7 @@ prepara_sprite <- function(ruta_sprite, x, y, semitamanio) {
     annotation_custom(
       xmin = x - semitamanio, xmax = x + semitamanio, 
       ymin = y - semitamanio, ymax = y + semitamanio
-  )
+    )
 }
 
 # Ploteando para cada tipo:
@@ -173,17 +173,17 @@ biplot(pca, cex = c(0.6, 0.85), arrow.len = 0.05,
 pokemon_go_1_251_pca <- indices_pokemon_go_1_251_estandarizado %>%
   cbind(pca$x) %>%
   rename(
-    PC1_fuerza_total = PC1,
-    PC2_defensa_sobre_ataque = PC2
+    pc1_fuerza_total = PC1,
+    pc2_defensa_sobre_ataque = PC2
   )
 summary(pokemon_go_1_251_pca)
 
-ggplot(data = pokemon_go_1_251_pca, aes(x = PC1_fuerza_total, y = PC2_defensa_sobre_ataque)) +
+ggplot(data = pokemon_go_1_251_pca, aes(x = pc1_fuerza_total, y = pc2_defensa_sobre_ataque)) +
   # Para que ggplot centre las coordenadas, necesitamos geom_point()
   geom_point(alpha = 0) +
   apply(pokemon_go_1_251_pca, 1, function(x){
     ruta_sprite <- paste0(ruta_carpeta, "/", as.numeric(x[["no"]]), ".png")
-    prepara_sprite(ruta_sprite, as.numeric(x["PC1_fuerza_total"]), as.numeric(x["PC2_defensa_sobre_ataque"]), 1.5)
+    prepara_sprite(ruta_sprite, as.numeric(x["pc1_fuerza_total"]), as.numeric(x["pc2_defensa_sobre_ataque"]), 1.5)
   }) +
   theme_bw() +
   labs(x = "PC1: Fuerza total", y = "PC2: Defensa sobre ataque") +
@@ -201,7 +201,7 @@ source("2_pokemon_go_calcular_estadisticas_individuales_pokemon.R")
 # Calculando HP, ataque, defensa  y CP máximo de cada Pokémon:
 estadisticas_maximas_pokemon_go <- ldply(unique(pokemon_go_1_251_pca$nombre), function(x){
   calcula_estadisticas_individuales(x, 15, 15, 15, 40)
-  }) %>%
+}) %>%
   select(
     no,
     contains("maxim")
@@ -213,12 +213,12 @@ pokemon_go_1_251_pca_estadisticas_maximas <- pokemon_go_1_251_pca %>%
 
 # Ploteando:
 ggplot(data = pokemon_go_1_251_pca_estadisticas_maximas,
-  aes(x = PC1_fuerza_total, y = PC2_defensa_sobre_ataque, colour = cp_maximo)) +
+  aes(x = pc1_fuerza_total, y = pc2_defensa_sobre_ataque, colour = cp_maximo)) +
   geom_point() +
   scale_color_gradientn(colours = rainbow(5))
 
 ggplot(data = pokemon_go_1_251_pca_estadisticas_maximas,
-  aes(x = PC1_fuerza_total, y = cp_maximo)) +
+  aes(x = pc1_fuerza_total, y = cp_maximo)) +
   geom_point() +
   geom_smooth()
 # Podemos ver cómo diferencias en CP tienden a sobreestimar diferencias en poder
@@ -229,8 +229,8 @@ ggplot(data = pokemon_go_1_251_pca_estadisticas_maximas,
 # Se ve una gran correlación entre PC1_fuerza_total y CP. Revisándola:
 pokemon_go_1_251_pca_estadisticas_maximas %>%
   select(
-    PC1_fuerza_total,
-    PC2_defensa_sobre_ataque,
+    pc1_fuerza_total,
+    pc2_defensa_sobre_ataque,
     cp_maximo) %>%
   cor() %>%
   round(5)
@@ -240,15 +240,15 @@ pokemon_go_1_251_pca_estadisticas_maximas %>%
 pokemon_go_1_251_tabla_uso_practico <- pokemon_go_1_251_pca_estadisticas_maximas %>%
   # Sólo me voy a quedar con los que son mñas poderosos que kadabra: la preevolución
   # más poderosa
-  filter(PC1_fuerza_total > PC1_fuerza_total[nombre == "kadabra"]) %>%
+  filter(pc1_fuerza_total > pc1_fuerza_total[nombre == "kadabra"]) %>%
   ddply(.variables = .(tipo), function(df){
     resultado <- df %>%
-      arrange(desc(PC1_fuerza_total)) %>%
+      arrange(desc(pc1_fuerza_total)) %>%
       select(
         no,
         nombre,
-        PC1_fuerza_total,
-        PC2_defensa_sobre_ataque,
+        pc1_fuerza_total,
+        pc2_defensa_sobre_ataque,
         cp_maximo
       ) %>%
       head(10)
@@ -262,4 +262,4 @@ pokemon_go_1_251_tabla_uso_practico <- pokemon_go_1_251_pca_estadisticas_maximas
 
 
 
-  
+
