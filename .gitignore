@@ -33,7 +33,6 @@ vignettes/*.pdf
 *.knit.md
 
 # Other
-.csv
-.xlsx
-.jpg
-.png
+datos
+graficas
+sprites
