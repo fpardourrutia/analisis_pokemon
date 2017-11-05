@@ -1,7 +1,11 @@
-library("plyr")
-library("dplyr")
-library("tidyr")
+source("config.R")
+source(ruta_archivo_funciones_auxiliares)
 library("ggplot2")
+
+# Obteniendo datos de los pokémon de interés
+status_base_pokemon_1_251 <- obtener_status(251)
+summary(status_base_pokemon_1_251)
+#saveRDS(status_base_pokemon_1_251, "../../datos/pokemon_go/status_base_pokemon_1_251.RData")
 
 # Paquete para Web scrapping
 library("rvest")
@@ -18,7 +22,7 @@ multiplicadores_cp_nivel <- read_html("https://pokemongo.gamepress.gg/cp-multipl
     level = Level,
     cp_multiplier = `CP Multiplier`
   )
-#saveRDS(multiplicadores_cp_nivel, "../datos/multiplicadores_cp_nivel.RData")
+#saveRDS(multiplicadores_cp_nivel, "../../datos/pokemon_go/multiplicadores_cp_nivel.RData")
 
 # La siguiente función calcula, dada una tabla de status de pokémon (tabla base)
 # que contiene las siguientes columnas:
@@ -64,11 +68,11 @@ calcula_stats_pokemon_go <- function(tabla_base){
 }
 
 # Leyendo datos:
-status_base_pokemon_1_251 <- readRDS("../datos/status_base_pokemon_1_251.RData")
+status_base_pokemon_1_251 <- readRDS("../../datos/status_base_pokemon_1_251.RData")
 
 # Calculando status de Pokémon Go
 status_base_pokemon_go_1_251 <- calcula_stats_pokemon_go(status_base_pokemon_1_251)
-#saveRDS(status_base_pokemon_go_1_251, "../datos/status_base_pokemon_go_1_251.RData")
+#saveRDS(status_base_pokemon_go_1_251, "../../datos/pokemon_go/status_base_pokemon_go_1_251.RData")
 summary(status_base_pokemon_go_1_251)
 
 # Graficando los status por número de Pokémon

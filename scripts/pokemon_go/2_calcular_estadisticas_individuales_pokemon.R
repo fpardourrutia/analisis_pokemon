@@ -3,8 +3,8 @@ library("dplyr")
 library("tidyr")
 
 # Leyendo datos de Pokémon Go:
-status_base_pokemon_go_1_251 <- readRDS("../datos/status_base_pokemon_go_1_251.RData")
-multiplicadores_cp_nivel <- readRDS("../datos/multiplicadores_cp_nivel.RData")
+status_base_pokemon_go_1_251 <- readRDS("../../datos/pokemon_go/status_base_pokemon_go_1_251.RData")
+multiplicadores_cp_nivel <- readRDS("../../datos/pokemon_go/multiplicadores_cp_nivel.RData")
 
 # La siguiente función, calcula, dados:
 #   no_pokemon: el número nacional de pokémon
@@ -76,7 +76,7 @@ calcula_estadisticas_individuales <- function(especie, iv_ataque, iv_defensa, iv
 # calcula_estadisticas_individuales("articuno", 15, 10, 12, 40)
 # Mi articuno es perfecto...
 
-# Revisando máximas estadísticasde los pokémon a nivel 29:
+# Revisando máximas estadísticas de los pokémon a nivel 29:
 # status_base_pokemon_go_1_251 %>%
 #   pull(name) %>%
 #   ldply(function(x) calcula_estadisticas_individuales(x, 15, 15, 15, 29)) %>%

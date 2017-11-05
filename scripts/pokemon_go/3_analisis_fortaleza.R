@@ -8,32 +8,10 @@ library("grid") # para plotear PNG's (rasterGrob())
 library("readr")
 
 # Leyendo datos de Pokémon Go:
-status_base_pokemon_go_1_251 <- readRDS("../datos/status_base_pokemon_go_1_251.RData")
+status_base_pokemon_go_1_251 <- readRDS("../../datos/pokemon_go/status_base_pokemon_go_1_251.RData")
 
-# La siguiente función recibe una tabla con números de pokémon y descarga los 
-# sprites asociados en una carpeta adecuada. Argumentos:
-#   tabla_base: una tabla con una columna de "no" donde se encuentran los números
-#   nacionales de los pokémon de interés
-#   ruta_carpeta: carpeta donde se almacenarán las imágenes de pokémon.
-# La función almacena los sprites en la ruta deseada.
-almacena_sprites <- function(tabla_base, ruta_carpeta){
-  
-  # Almacenando las imágenes en la carpeta deseada
-  l_ply(tabla_base$no, function(i){
-    
-    # Generando las URL's a partir de la columna "no" de "tabla_base
-    url <- paste0("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/", i, ".png")
-    
-    # Generando ruta del archivo
-    ruta_archivo <- paste0(ruta_carpeta, "/", i, ".png")
-    
-    # Almacenando el archivo en la ruta adecuada
-    GET(url, write_disk(ruta_archivo))
-  })
-}
-
-ruta_carpeta <- "../sprites/1_251"
-# almacena_sprites(status_base_pokemon_go_1_251, ruta_carpeta)
+ruta_carpeta <- "../../sprites/1_251"
+# almacena_sprites(status_base_pokemon_go_1_251$no, ruta_carpeta)
 
 ### Calculando los índices a plotear, de acuerdo a mi conocimiento experto
 indices_pokemon_go_1_251 <- status_base_pokemon_go_1_251 %>%
@@ -91,7 +69,7 @@ prepara_sprite <- function(ruta_sprite, x, y, semitamanio) {
 #     ylim(0, 330)
 #     
 #   # Guardando plot
-#   #ggsave(paste0("../graficas/", x, ".jpg"))
+#   #ggsave(paste0("../../graficas/pokemon_go", x, ".jpg"))
 # })
 # 
 # # Ploteando todos
@@ -110,7 +88,7 @@ prepara_sprite <- function(ruta_sprite, x, y, semitamanio) {
 #   ylim(0, 330)
 
 # Guardando plot
-#ggsave("../graficas/todos.jpg")
+#ggsave("../../graficas/pokemon_go/todos.jpg")
 
 ####
 
@@ -142,7 +120,7 @@ ggplot(data = indices_pokemon_go_1_251_estandarizado,
   ylim(-27, 33)
 
 # Guardando plot
-#ggsave("../graficas/todos_estandarizado.jpg")
+#ggsave("../../graficas/pokemon_go/todos_estandarizado.jpg")
 
 
 # Ahora se creará un PCA para encontrar resúmenes más informativos de las diferencias
@@ -192,11 +170,11 @@ ggplot(data = pokemon_go_1_251_pca, aes(x = pc1_fuerza_total, y = pc2_defensa_so
   ylim(-17, 39)
 
 # Guardando plot
-#ggsave("../graficas/pca.jpg")
+#ggsave("../../graficas/pokemon_go/pca.jpg")
 
 ### Revisando la correlación entre CP máximo y PC1
 
-source("2_pokemon_go_calcular_estadisticas_individuales_pokemon.R")
+source("2_calcular_estadisticas_individuales_pokemon.R")
 
 # Calculando HP, ataque, defensa  y CP máximo de cada Pokémon:
 estadisticas_maximas_pokemon_go <- ldply(unique(pokemon_go_1_251_pca$nombre), function(x){
@@ -255,7 +233,7 @@ pokemon_go_1_251_tabla_uso_practico <- pokemon_go_1_251_pca_estadisticas_maximas
     
     return(resultado)
   })
-#write_csv(pokemon_go_1_251_tabla_uso_practico, "../datos/pokemon_go_1_251_tabla_uso_practico.csv")
+#write_csv(pokemon_go_1_251_tabla_uso_practico, "../../datos/pokemon_go/1_251_tabla_uso_practico.csv")
 
 
 
